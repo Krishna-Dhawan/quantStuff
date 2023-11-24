@@ -19,3 +19,21 @@ for i in csv_data:
         f.close()
     hpp[i] = L2
 print(hpp)
+
+"""Simple moving average: arithmetic mean of previous n days"""
+sma = {}
+for i in csv_data:
+    with open(i, 'r+', newline='') as f:
+        reader = csv.DictReader(f)
+        L = []
+        for row in reader:
+            L.append(float(row['Close']))
+        L2 = []
+        for j in range(len(L)-100):
+            s = 0
+            for k in range(j, j+100):
+                s += L[j]
+            L2.append(s/100)
+        f.close()
+    sma[i] = L2
+print(sma)

@@ -37,3 +37,19 @@ for i in csv_data:
         f.close()
     sma[i] = L2
 print(sma)
+
+"""Exponential moving average: a*current day + (1-a)*previous ema, where a is smoothening factor 2/(1+n)"""
+ema = {}
+for i in csv_data:
+    with open(i, 'r+', newline='') as f:
+        reader = csv.DictReader(f)
+        L = []
+        for row in reader:
+            L.append(float(row['Close']))
+        L2 = [L[0]]
+        a = 2/(1+len(L))
+        for j in range(len(L)-1):
+            L2.append(a*L[j+1] + (1-a)*L2[j])
+        f.close()
+    ema[i] = L2
+print(ema)

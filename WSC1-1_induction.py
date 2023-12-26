@@ -86,3 +86,34 @@ for i in csv_data:
         f.close()
     obv[i] = L2
 print(obv)
+
+""" %K = (closing - lowest low)/(highest high - lowest low)
+    represents current closing price wrt high low range over period
+    %D = moving average of %K 
+    When the %K line crosses above the %D line, it may signal a potential buying opportunity (bullish crossover).
+    When the %K line crosses below the %D line, it may indicate a potential selling opportunity (bearish crossover)."""
+pk = {}
+pd = {}
+for i in csv_data:
+    with open(i, 'r+', newline='') as f:
+        reader = csv.DictReader(f)
+        Lc = []
+        Ll = []
+        Lh = []
+        for row in reader:
+            Lc.append(float(row['Close']))
+            Ll.append(float(row['Low']))
+            Lh.append(float(row['High']))
+        L2 = []
+        for j in range(13, len(Lc)):
+            hh = max(Lh[j-13:j+1:])
+            ll = min(Ll[j-13:j+1:])
+            L2.append(((Lc[j] - ll) / (hh - ll)) * 100)
+        L3 = []
+        for j in range(3, len(L2)):
+            L3.append(sum(L2[j-3:j+1:]) / 3)
+        f.close()
+    pk[i] = L2
+    pd[i] = L3
+print(pk)
+print(pd)
